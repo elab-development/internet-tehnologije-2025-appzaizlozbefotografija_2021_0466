@@ -1,0 +1,23 @@
+.app {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 40px;
+  font-family: Arial, sans-serif;
+  text-align: center;
+}
+ 
+.section {
+  margin-top: 40px;
+}
+ 
+button {
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+}
+ 
+.message {
+  margin-top: 20px;
+  font-weight: bold;
+  color: green;
+}
