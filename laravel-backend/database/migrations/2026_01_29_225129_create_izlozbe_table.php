@@ -6,22 +6,21 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
-        Schema::create('prijavas', function (Blueprint $table) {
+        Schema::create('izlozbe', function (Blueprint $table) {
             $table->id();
+            $table->string('naziv');
+            $table->text('opis')->nullable();
+            $table->string('lokacija');
+            $table->dateTime('datum');
+            $table->unsignedInteger('dostupna_mesta');
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
-        Schema::dropIfExists('prijavas');
+        Schema::dropIfExists('izlozbe');
     }
 };
