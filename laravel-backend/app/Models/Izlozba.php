@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Models\Prijava;
+use App\Models\Fotografija;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -20,15 +22,12 @@ class Izlozba extends Model
     ];
 
     public function prijave()
-{
-    return $this->hasMany(Prijava::class, 'izlozba_id');
-}
+    {
+        return $this->hasMany(Prijava::class, 'izlozba_id');
+    }
 
-   
-public function fotografije()
-{
-    return $this->hasMany(\App\Models\Fotografija::class);
-}
-
-
+    public function fotografije()
+    {
+        return $this->hasMany(Fotografija::class, 'izlozba_id');
+    }
 }

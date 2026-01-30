@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Prijava;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
@@ -25,6 +26,12 @@ class Korisnik extends Authenticatable
         'lozinka',
         'remember_token',
     ];
+
+    // Laravel auth koristi password polje po default-u, a kod tebe je "lozinka"
+    public function getAuthPassword()
+    {
+        return $this->lozinka;
+    }
 
     public function prijave()
     {
