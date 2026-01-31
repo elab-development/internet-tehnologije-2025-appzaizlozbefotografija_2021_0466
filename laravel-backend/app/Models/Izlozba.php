@@ -18,7 +18,7 @@ class Izlozba extends Model
         'opis',
         'lokacija',
         'datum',
-        'dostupnaMesta'
+        'dostupna_mesta'
     ];
 
     public function prijave()

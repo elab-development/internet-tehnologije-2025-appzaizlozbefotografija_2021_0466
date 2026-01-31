@@ -39,7 +39,7 @@ class IzlozbaController extends Controller
             'datum' => 'required|date',
             'lokacija' => 'required|string|max:255',
             'opis' => 'nullable|string',
-            'dostupnaMesta' => 'nullable|integer|min:0'
+            'dostupna_mesta' => 'nullable|integer|min:0'
         ]);
 
         $izlozba = Izlozba::create($validated);
@@ -74,7 +74,7 @@ class IzlozbaController extends Controller
             'datum' => 'required|date',
             'lokacija' => 'required|string|max:255',
             'opis' => 'nullable|string',
-            'dostupnaMesta' => 'nullable|integer|min:0'
+            'dostupna_mesta' => 'nullable|integer|min:0'
         ]);
 
         $izlozba->update($validated);
