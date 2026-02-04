@@ -27,7 +27,7 @@ class PrijavaController extends Controller
                     ->lockForUpdate()
                     ->firstOrFail();
 
-                if (($izlozba->dostupnaMesta ?? 0) <= 0) {
+                if (($izlozba->dostupna_mesta ?? 0) <= 0) {
                     return ['status' => 422, 'body' => ['poruka' => 'Nema više slobodnih mesta.']];
                 }
 
@@ -38,14 +38,14 @@ class PrijavaController extends Controller
                     'qr_kod' => (string) Str::uuid(),
                 ]);
 
-                $izlozba->decrement('dostupnaMesta');
+                $izlozba->decrement('dostupna_mesta');
 
                 return [
                     'status' => 201,
                     'body' => [
                         'poruka' => 'Uspešno rezervisano.',
                         'prijava' => $prijava,
-                        'preostaloMesta' => $izlozba->dostupnaMesta,
+                        'preostaloMesta' => $izlozba->dostupna_mesta,
                     ]
                 ];
             });
@@ -82,8 +82,8 @@ class PrijavaController extends Controller
                     ->first();
 
                 if ($izlozba) {
-                    $izlozba->increment('dostupnaMesta');
-                    $preostalo = $izlozba->dostupnaMesta;
+                    $izlozba->increment('dostupna_mesta');
+                    $preostalo = $izlozba->dostupna_mesta;
                 } else {
                     $preostalo = null;
                 }
