@@ -1,0 +1,27 @@
+.btn {
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 0;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn--primary {
+  background: #1f6feb;
+  color: white;
+}
+
+.btn--secondary {
+  background: #eee;
+  color: #111;
+}
+
+.btn--danger {
+  background: #e5484d;
+  color: white;
+}
