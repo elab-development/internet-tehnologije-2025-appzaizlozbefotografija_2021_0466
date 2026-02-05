@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import axios from "axios";
 
 export default function Izlozbe() {
@@ -32,7 +33,10 @@ export default function Izlozbe() {
         <ul>
           {izlozbe.map((i) => (
             <li key={i.id}>
-              <b>{i.naziv}</b> – {i.lokacija} ({i.datum})
+              <Link to={`/izlozbe/${i.id}`}>
+              <b>{i.naziv}</b>
+              </Link>
+              {" "}– {i.lokacija} ({i.datum})
             </li>
           ))}
         </ul>
