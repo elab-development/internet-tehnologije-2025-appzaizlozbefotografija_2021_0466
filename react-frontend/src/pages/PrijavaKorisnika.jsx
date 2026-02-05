@@ -4,6 +4,7 @@ import axios from "axios";
 
 import Button from "../components/Button";
 import Input from "../components/Input";
+import "./PrijavaKorisnika.css";
 
 export default function PrijavaKorisnika() {
   const navigate = useNavigate();
@@ -40,42 +41,44 @@ export default function PrijavaKorisnika() {
   };
 
   return (
-    <div style={{ maxWidth: 400 }}>
-      <h2>Prijava korisnika</h2>
+    <div className="prijava-page">
+      <div className="prijava-card">
+        <h2>Prijava korisnika</h2>
 
-      <form onSubmit={submit}>
-        <Input
-          label="Email"
-          name="email"
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          
-        />
+        <form onSubmit={submit}>
+          <Input
+            label="Email"
+            name="email"
+            type="email"
+            value={email}
+            onChange={(e) => {
+              setEmail(e.target.value);
+              setGreska("");
+            }}
+          />
 
-        <Input
-          label="Lozinka"
-          name="lozinka"
-          type="password"
-          value={lozinka}
-          onChange={(e) => setLozinka(e.target.value)}
-          
-        />
+          <Input
+            label="Lozinka"
+            name="lozinka"
+            type="password"
+            value={lozinka}
+            onChange={(e) => {
+              setLozinka(e.target.value);
+              setGreska("");
+            }}
+          />
 
-        <Button
-          type="submit"
-          disabled={loading}
-        >
-          {loading ? "Prijava..." : "Prijavi se"}
-        </Button>
+          <Button type="submit" disabled={loading}>
+            {loading ? "Prijava..." : "Prijavi se"}
+          </Button>
+        </form>
 
-      </form>
+        {greska && <p className="prijava-error">{greska}</p>}
 
-      {greska && <p style={{ color: "red" }}>{greska}</p>}
-
-      <p>
-        Nemaš nalog? <Link to="/registracija">Registruj se</Link>
-      </p>
+        <div className="prijava-footer">
+          Nemaš nalog? <Link to="/registracija">Registruj se</Link>
+        </div>
+      </div>
     </div>
   );
 }

@@ -12,7 +12,6 @@ import "./App.css";
 function AppContent() {
   const location = useLocation();
 
-  
   const hideNavbarRoutes = ["/", "/registracija"];
   const shouldHideNavbar = hideNavbarRoutes.includes(location.pathname);
 
@@ -20,17 +19,23 @@ function AppContent() {
     <>
       {!shouldHideNavbar && <NavBar />}
 
-      <div style={{ padding: "16px" }}>
+      {/* Padding samo kad navbar postoji */}
+      {shouldHideNavbar ? (
         <Routes>
           <Route path="/" element={<PrijavaKorisnika />} />
-          <Route path="/pocetna" element={<Pocetna />} />
-          <Route path="/izlozbe/:id/prijava" element={<Prijava />} />
           <Route path="/registracija" element={<Registracija />} />
-          <Route path="/izlozbe" element={<Izlozbe />} />
-          <Route path="/izlozbe/:id" element={<IzlozbaDetalji />} />
-          <Route path="/izlozbe/:id/galerija" element={<Galerija />} />
         </Routes>
-      </div>
+      ) : (
+        <div style={{ padding: "16px" }}>
+          <Routes>
+            <Route path="/pocetna" element={<Pocetna />} />
+            <Route path="/izlozbe/:id/prijava" element={<Prijava />} />
+            <Route path="/izlozbe" element={<Izlozbe />} />
+            <Route path="/izlozbe/:id" element={<IzlozbaDetalji />} />
+            <Route path="/izlozbe/:id/galerija" element={<Galerija />} />
+          </Routes>
+        </div>
+      )}
     </>
   );
 }

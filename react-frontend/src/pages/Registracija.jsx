@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
+
 import Input from "../components/Input";
 import Button from "../components/Button";
+import "./Registracija.css";
 
 export default function Registracija() {
   const navigate = useNavigate();
@@ -14,12 +16,10 @@ export default function Registracija() {
   const [lozinkaPotvrda, setLozinkaPotvrda] = useState("");
 
   const [loading, setLoading] = useState(false);
-  const [poruka, setPoruka] = useState("");
   const [greska, setGreska] = useState("");
 
   const submit = async (e) => {
     e.preventDefault();
-    setPoruka("");
     setGreska("");
     setLoading(true);
 
@@ -32,9 +32,7 @@ export default function Registracija() {
         lozinka_confirmation: lozinkaPotvrda,
       });
 
-      // očekujemo: { korisnik: {...}, token: "..." }
-      const token = res.data.token;
-      const korisnik = res.data.korisnik;
+      const { token, korisnik } = res.data;
 
       if (!token || !korisnik?.id) {
         setGreska("Registracija je prošla, ali nema tokena/korisnika u odgovoru.");
@@ -44,8 +42,7 @@ export default function Registracija() {
       localStorage.setItem("token", token);
       localStorage.setItem("korisnikId", String(korisnik.id));
 
-      setPoruka("Uspešna registracija! Token je sačuvan.");
-      navigate("/");
+      navigate("/pocetna");
     } catch (err) {
       const msg =
         err?.response?.data?.message ||
@@ -58,60 +55,80 @@ export default function Registracija() {
   };
 
   return (
-    <div style={{ maxWidth: 420 }}>
-      <h2>Registracija</h2>
+    <div className="registracija-page">
+      <div className="registracija-card">
+        <h2>Registracija</h2>
 
-      <form onSubmit={submit}>
-        <Input
-          label="Ime"
-          name="ime"
-          value={ime}
-          onChange={(e) => setIme(e.target.value)}
-          placeholder="Unesite ime"
-        />
+        <form onSubmit={submit}>
+          <Input
+            label="Ime"
+            name="ime"
+            value={ime}
+            onChange={(e) => {
+              setIme(e.target.value);
+              setGreska("");
+            }}
+            placeholder="Unesite ime"
+          />
 
-        <Input
-          label="Prezime"
-          name="prezime"
-          value={prezime}
-          onChange={(e) => setPrezime(e.target.value)}
-        />
+          <Input
+            label="Prezime"
+            name="prezime"
+            value={prezime}
+            onChange={(e) => {
+              setPrezime(e.target.value);
+              setGreska("");
+            }}
+            placeholder="Unesite prezime"
+          />
 
-        <Input
-          label="Email"
-          name="email"
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
+          <Input
+            label="Email"
+            name="email"
+            type="email"
+            value={email}
+            onChange={(e) => {
+              setEmail(e.target.value);
+              setGreska("");
+            }}
+            placeholder="Unesite email"
+          />
 
-        <Input
-          label="Lozinka"
-          name="lozinka"
-          type="password"
-          value={lozinka}
-          onChange={(e) => setLozinka(e.target.value)}
-        />
+          <Input
+            label="Lozinka"
+            name="lozinka"
+            type="password"
+            value={lozinka}
+            onChange={(e) => {
+              setLozinka(e.target.value);
+              setGreska("");
+            }}
+            placeholder="Unesite lozinku"
+          />
 
-        <Input
-          label="Potvrda lozinke"
-          name="lozinkaPotvrda"
-          type="password"
-          value={lozinkaPotvrda}
-          onChange={(e) => setLozinkaPotvrda(e.target.value)}
-        />
+          <Input
+            label="Potvrda lozinke"
+            name="lozinkaPotvrda"
+            type="password"
+            value={lozinkaPotvrda}
+            onChange={(e) => {
+              setLozinkaPotvrda(e.target.value);
+              setGreska("");
+            }}
+            placeholder="Ponovite lozinku"
+          />
 
-        <Button type="submit" disabled={loading}>
-          {loading ? "Slanje..." : "Registruj se"}
-        </Button>
-      </form>
+          <Button type="submit" disabled={loading}>
+            {loading ? "Slanje..." : "Registruj se"}
+          </Button>
+        </form>
 
-      {poruka && <p style={{ color: "green" }}>{poruka}</p>}
-      {greska && <p style={{ color: "red" }}>{greska}</p>}
+        {greska && <p className="registracija-error">{greska}</p>}
 
-      <p style={{ marginTop: 12 }}>
-        <Link to="/">Nazad na prijavu</Link>
-      </p>
+        <div className="registracija-footer">
+          Imaš nalog? <Link to="/">Prijavi se</Link>
+        </div>
+      </div>
     </div>
   );
 }
