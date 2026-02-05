@@ -110,7 +110,7 @@ export default function Registracija() {
       {greska && <p style={{ color: "red" }}>{greska}</p>}
 
       <p style={{ marginTop: 12 }}>
-        <Link to="/">Nazad na izložbe</Link>
+        <Link to="/">Nazad na prijavu</Link>
       </p>
     </div>
   );
