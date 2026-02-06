@@ -7,11 +7,11 @@
   align-items: center;
 
   background-color: #f5f6f8;
-  padding: 16px; /* bitno za mobile */
+  padding: 16px; 
   box-sizing: border-box;
 }
 
-/* kartica */
+
 .prijava-card {
   width: 100%;
   max-width: 420px;
@@ -23,26 +23,26 @@
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
 }
 
-/* naslov */
+
 .prijava-card h2 {
   text-align: center;
   margin-bottom: 24px;
   color: #333;
 }
 
-/* forma */
+
 .prijava-card form {
   display: flex;
   flex-direction: column;
   gap: 16px;
 }
 
-/* dugme */
+
 .prijava-card button {
   margin-top: 8px;
 }
 
-/* error poruka */
+
 .prijava-error {
   margin-top: 12px;
   color: #c0392b;
@@ -50,7 +50,7 @@
   font-size: 14px;
 }
 
-/* footer ispod forme */
+
 .prijava-footer {
   margin-top: 20px;
   text-align: center;
@@ -66,7 +66,7 @@
   text-decoration: underline;
 }
 
-/* 📱 manji ekrani */
+
 @media (max-width: 480px) {
   .prijava-card {
     padding: 24px 20px;

@@ -1,23 +1,17 @@
-.app {
-  max-width: 800px;
+•⁠  ⁠{
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+
+.app-shell {
+  width: 100%;
+  max-width: 1100px;
   margin: 0 auto;
-  padding: 40px;
-  font-family: Arial, sans-serif;
-  text-align: center;
-}
- 
-.section {
-  margin-top: 40px;
-}
- 
-button {
-  padding: 10px 20px;
-  font-size: 16px;
-  cursor: pointer;
-}
- 
-.message {
-  margin-top: 20px;
-  font-weight: bold;
-  color: green;
+  padding: 16px;
 }
