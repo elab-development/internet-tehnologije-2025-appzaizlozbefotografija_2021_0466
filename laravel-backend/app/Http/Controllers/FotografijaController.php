@@ -14,7 +14,7 @@ class FotografijaController extends Controller
 
     public function store(Request $request)
     {
-        if (auth()->user()->uloga !== 'fotograf') {
+        if (!auth()->check() || auth()->user()->uloga !== 'fotograf') {
             return response()->json(['poruka' => 'Samo fotograf može da dodaje fotografije.'], 403);
         }
 
@@ -39,7 +39,7 @@ class FotografijaController extends Controller
             $imeFajla = time() . '.' . $request->file('slika')->getClientOriginalExtension();
             $request->file('slika')->move(public_path('fotografije'), $imeFajla);
             $fotografija->putanja_slike = 'fotografije/' . $imeFajla;
-        } elseif ($request->filled('url')) {
+        } else {
             $fotografija->putanja_slike = $validated['url'];
         }
 
@@ -59,29 +59,15 @@ class FotografijaController extends Controller
         return response()->json($fotografija, 200);
     }
 
-    // Ako ne koristiš update rutu, možeš slobodno obrisati ovu metodu
     public function update(Request $request, $id)
     {
-        $fotografija = Fotografija::find($id);
-        if (!$fotografija) {
-            return response()->json(['poruka' => 'Fotografija nije pronađena.'], 404);
-        }
-
-        $validated = $request->validate([
-            'naziv' => 'sometimes|string|max:100',
-            'opis' => 'nullable|string|max:500',
-            'izlozba_id' => 'sometimes|exists:izlozbe,id',
-        ]);
-
-        $fotografija->update($validated);
-
-        return response()->json($fotografija->load('izlozba'), 200);
+        return response()->json(['poruka' => 'Izmena fotografija nije podržana.'], 405);
     }
 
     public function destroy($id)
     {
-        if (!in_array(auth()->user()->uloga, ['admin', 'fotograf'])) {
-            return response()->json(['poruka' => 'Nemate dozvolu za ovu akciju.'], 403);
+        if (!auth()->check() || auth()->user()->uloga !== 'admin') {
+            return response()->json(['poruka' => 'Samo administrator može da briše fotografije.'], 403);
         }
 
         $fotografija = Fotografija::find($id);

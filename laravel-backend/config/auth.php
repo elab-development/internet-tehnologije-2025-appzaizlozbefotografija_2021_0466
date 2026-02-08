@@ -19,13 +19,11 @@ return [
     */
     'guards' => [
 
-        // Web (nije presudno za API, ali neka ostane)
         'web' => [
             'driver' => 'session',
             'provider' => 'users',
         ],
 
-        // API guard preko Sanctum-a
         'sanctum' => [
             'driver' => 'sanctum',
             'provider' => 'users',
@@ -39,7 +37,7 @@ return [
     */
     'providers' => [
 
-        // KLJUČNO: koristi se Korisnik model
+        
         'users' => [
             'driver' => 'eloquent',
             'model' => App\Models\Korisnik::class,

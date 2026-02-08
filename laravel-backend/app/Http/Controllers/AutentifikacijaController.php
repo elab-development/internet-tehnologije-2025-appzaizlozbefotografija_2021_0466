@@ -15,7 +15,13 @@ class AutentifikacijaController extends Controller
             'prezime' => 'required|string|max:255',
             'email' => 'required|email|unique:korisnici,email',
             'lozinka' => 'required|string|min:6|confirmed',
-        ]);
+        ],
+        
+        [
+        'email.unique' => 'Email adresa je već registrovana.',
+        ]
+
+        );
 
         $korisnik = Korisnik::create([
             'ime' => $podaci['ime'],

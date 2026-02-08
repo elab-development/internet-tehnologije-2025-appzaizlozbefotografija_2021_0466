@@ -15,14 +15,12 @@ class KorisnikController extends Controller
         }
     }
 
-    // ADMIN: lista korisnika
     public function index()
     {
         $this->samoAdmin();
         return response()->json(Korisnik::all(), 200);
     }
 
-    // ADMIN: dodavanje korisnika (opciono)
     public function store(Request $request)
     {
         $this->samoAdmin();
@@ -46,7 +44,6 @@ class KorisnikController extends Controller
         return response()->json($korisnik, 201);
     }
 
-    // ADMIN: promena uloge / emaila / lozinke
     public function update(Request $request, $id)
     {
         $this->samoAdmin();
@@ -73,7 +70,6 @@ class KorisnikController extends Controller
         return response()->json($korisnik, 200);
     }
 
-    // ADMIN: brisanje korisnika (opciono)
     public function destroy($id)
     {
         $this->samoAdmin();
@@ -87,7 +83,6 @@ class KorisnikController extends Controller
         return response()->json(['poruka' => 'Korisnik obrisan.'], 200);
     }
 
-    // JAVNO/ZAŠTIĆENO (po tvojoj ruti): izložbe korisnika (preko prijava)
     public function izlozbe($id)
     {
         $korisnik = Korisnik::find($id);

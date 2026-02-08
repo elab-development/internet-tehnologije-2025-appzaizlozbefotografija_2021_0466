@@ -10,7 +10,24 @@ use Illuminate\Support\Str;
 
 class PrijavaController extends Controller
 {
-    // Kreiranje nove prijave (posetilac)
+    
+    public function index()
+    {
+        if (!auth()->check()) {
+            return response()->json(['poruka' => 'Niste autentifikovani.'], 401);
+        }
+
+        if (auth()->user()->uloga !== 'admin') {
+            return response()->json(['poruka' => 'Nemate dozvolu za ovu akciju.'], 403);
+        }
+
+        $prijave = Prijava::with(['korisnik', 'izlozba'])
+            ->orderByDesc('id')
+            ->get();
+
+        return response()->json($prijave, 200);
+    }
+
     public function store(Request $request)
     {
         if (!auth()->check() || auth()->user()->uloga !== 'posetilac') {
@@ -58,7 +75,6 @@ class PrijavaController extends Controller
         }
     }
 
-    // Brisanje prijave (admin ili posetilac koji je napravio prijavu)
     public function destroy($id)
     {
         if (!auth()->check()) {
@@ -71,6 +87,8 @@ class PrijavaController extends Controller
         }
 
         $uloga = auth()->user()->uloga;
+
+        
         if ($uloga !== 'admin' && $prijava->korisnik_id !== auth()->id()) {
             return response()->json(['poruka' => 'Nemate dozvolu za brisanje.'], 403);
         }
@@ -81,11 +99,11 @@ class PrijavaController extends Controller
                     ->lockForUpdate()
                     ->first();
 
+                $preostalo = null;
+
                 if ($izlozba) {
                     $izlozba->increment('dostupna_mesta');
                     $preostalo = $izlozba->dostupna_mesta;
-                } else {
-                    $preostalo = null;
                 }
 
                 $prijava->delete();
@@ -107,7 +125,7 @@ class PrijavaController extends Controller
         }
     }
 
-    // Ažuriranje datuma svih prijava za izložbu (admin)
+    
     public function azurirajDatumeZaIzlozbu(Request $request, $id)
     {
         if (!auth()->check() || auth()->user()->uloga !== 'admin') {

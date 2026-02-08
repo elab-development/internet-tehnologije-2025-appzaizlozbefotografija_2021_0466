@@ -27,7 +27,7 @@ class Korisnik extends Authenticatable
         'remember_token',
     ];
 
-    // Laravel auth koristi password polje po default-u, a kod tebe je "lozinka"
+    
     public function getAuthPassword()
     {
         return $this->lozinka;
