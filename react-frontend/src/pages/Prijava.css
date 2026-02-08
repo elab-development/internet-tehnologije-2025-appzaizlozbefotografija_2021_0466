@@ -1,0 +1,143 @@
+.prj-page {
+  padding: 24px 16px;
+}
+
+.prj-container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.prj-card {
+  background: #fff;
+  border: 1px solid rgba(0,0,0,0.08);
+  border-radius: 16px;
+  padding: 18px;
+  box-shadow: 0 10px 28px rgba(0,0,0,0.06);
+}
+
+.prj-top {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 8px;
+}
+
+.prj-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  text-decoration: none;
+  color: #1f6feb;
+  font-weight: 700;
+  padding: 8px 10px;
+  border-radius: 10px;
+}
+.prj-back:hover {
+  background: rgba(31, 111, 235, 0.08);
+}
+
+.prj-title {
+  margin: 6px 0 8px;
+  font-size: 28px;
+  letter-spacing: -0.2px;
+}
+
+.prj-subtitle {
+  margin: 0 0 14px;
+  color: #555;
+}
+
+.prj-meta {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin: 10px 0 16px;
+}
+
+.prj-metaItem {
+  border: 1px solid rgba(0,0,0,0.08);
+  border-radius: 12px;
+  padding: 10px 12px;
+  background: rgba(0,0,0,0.02);
+}
+
+.prj-label {
+  display: block;
+  font-size: 12px;
+  color: #777;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+}
+
+.prj-value {
+  font-weight: 800;
+  color: #222;
+}
+
+.prj-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  margin-top: 10px;
+}
+
+
+.prj-secondaryBtn {
+  border: 1px solid rgba(0,0,0,0.12);
+  background: #fff;
+  color: #111;
+  border-radius: 12px;
+  padding: 10px 14px;
+  cursor: pointer;
+  font-weight: 800;
+}
+.prj-secondaryBtn:hover {
+  background: rgba(0,0,0,0.03);
+}
+
+.prj-alert {
+  margin-top: 14px;
+  padding: 12px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(0,0,0,0.08);
+}
+
+.prj-alert--ok {
+  color: #1b5e20;
+  background: rgba(27, 94, 32, 0.08);
+  border-color: rgba(27, 94, 32, 0.18);
+}
+
+.prj-alert--err {
+  color: #b00020;
+  background: rgba(176, 0, 32, 0.06);
+  border-color: rgba(176, 0, 32, 0.15);
+}
+
+.prj-hint {
+  margin-top: 12px;
+  color: #666;
+  font-size: 13px;
+}
+
+.prj-state {
+  max-width: 900px;
+  margin: 24px auto;
+  padding: 14px 16px;
+  border-radius: 12px;
+  border: 1px solid rgba(0,0,0,0.08);
+  background: rgba(0,0,0,0.02);
+}
+
+.prj-state--error {
+  color: #b00020;
+  background: rgba(176, 0, 32, 0.06);
+  border-color: rgba(176, 0, 32, 0.15);
+}
+
+@media (max-width: 700px) {
+  .prj-meta {
+    grid-template-columns: 1fr;
+  }
+}

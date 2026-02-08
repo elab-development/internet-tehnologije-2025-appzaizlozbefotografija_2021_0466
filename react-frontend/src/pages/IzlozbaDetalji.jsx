@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import axios from "axios";
+import "./IzlozbaDetalji.css";
 
 function IzlozbaDetalji() {
   const { id } = useParams();
@@ -10,24 +11,68 @@ function IzlozbaDetalji() {
   useEffect(() => {
     axios
       .get(`http://127.0.0.1:8000/api/izlozbe/${id}`)
-      .then(res => setIzlozba(res.data))
+      .then((res) => {
+        const data = res.data?.data ?? res.data; 
+        setIzlozba(data);
+      })
       .catch(() => setError("Greška pri učitavanju izložbe"));
   }, [id]);
 
-  if (error) return <p style={{ color: "red" }}>{error}</p>;
-  if (!izlozba) return <p>Učitavanje...</p>;
+  if (error) return <div className="izd-state">{error}</div>;
+  if (!izlozba) return <div className="izd-state">Učitavanje...</div>;
 
   return (
-    <div>
-      <h1>{izlozba.naziv}</h1>
-      <p><b>Opis:</b> {izlozba.opis}</p>
-      <p><b>Datum:</b> {izlozba.datum}</p>
-      <p><b>Lokacija:</b> {izlozba.lokacija}</p>
-      <p><b>Dostupna mesta:</b> {izlozba.dostupna_mesta}</p>
+    <div className="izd-page">
+      <div className="izd-container">
+        <div className="izd-card">
+          <h1 className="izd-title">{izlozba.naziv}</h1>
 
-      <Link to="/izlozbe">← Nazad na izložbe</Link>
-      <Link to={`/izlozbe/${izlozba.id}/galerija`}> Pogledaj galeriju</Link>
-      <Link to={`/izlozbe/${izlozba.id}/prijava`}> Rezerviši mesto</Link>
+          {izlozba.opis ? (
+            <p className="izd-desc">{izlozba.opis}</p>
+          ) : (
+            <p className="izd-desc">Nema opisa.</p>
+          )}
+
+          <div className="izd-meta">
+            <div className="izd-metaItem">
+              <span className="izd-label">Datum</span>
+              <div className="izd-value">{izlozba.datum}</div>
+            </div>
+
+            <div className="izd-metaItem">
+              <span className="izd-label">Lokacija</span>
+              <div className="izd-value">{izlozba.lokacija}</div>
+            </div>
+
+            <div className="izd-metaItem">
+              <span className="izd-label">Dostupna mesta</span>
+              <div className="izd-value">{izlozba.dostupna_mesta}</div>
+            </div>
+
+          
+          </div>
+
+          <div className="izd-actions">
+            <Link to="/izlozbe" className="izd-btn izd-btnLink">
+              ← Nazad na izložbe
+            </Link>
+
+            <Link
+              to={`/izlozbe/${izlozba.id}/galerija`}
+              className="izd-btn"
+            >
+              Pogledaj galeriju
+            </Link>
+
+            <Link
+              to={`/izlozbe/${izlozba.id}/prijava`}
+              className="izd-btn izd-btnPrimary"
+            >
+              Rezerviši mesto
+            </Link>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

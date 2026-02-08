@@ -1,13 +1,22 @@
-•⁠  ⁠{
+* {
   box-sizing: border-box;
 }
 
-html, body, #root {
+html,
+body,
+#root {
   width: 100%;
   margin: 0;
   padding: 0;
 }
 
+:root {
+  --nav-h: 56px;
+}
+
+.with-navbar {
+  padding-top: var(--nav-h);
+}
 
 .app-shell {
   width: 100%;

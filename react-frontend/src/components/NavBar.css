@@ -1,9 +1,16 @@
 .nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 56px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 12px 16px;
   border-bottom: 1px solid #eee;
+  background: #fff;
+  z-index: 9999;
 }
 
 .nav__brand {

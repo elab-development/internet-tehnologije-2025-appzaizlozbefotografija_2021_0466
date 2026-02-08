@@ -2,9 +2,10 @@ import { useEffect, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Button from "../components/Button";
+import "./Prijava.css";
 
 export default function Prijava() {
-  const { id } = useParams(); // id izložbe
+  const { id } = useParams();
   const navigate = useNavigate();
 
   const [izlozba, setIzlozba] = useState(null);
@@ -12,14 +13,16 @@ export default function Prijava() {
   const [poruka, setPoruka] = useState("");
   const [greska, setGreska] = useState("");
 
-  // token i korisnik (ako si ih sačuvao posle login/registracija)
   const token = localStorage.getItem("token");
   const korisnikId = localStorage.getItem("korisnikId");
 
   useEffect(() => {
     axios
       .get(`http://127.0.0.1:8000/api/izlozbe/${id}`)
-      .then((res) => setIzlozba(res.data))
+      .then((res) => {
+        const data = res.data?.data ?? res.data;
+        setIzlozba(data);
+      })
       .catch(() => setGreska("Ne mogu da učitam izložbu."))
       .finally(() => setLoading(false));
   }, [id]);
@@ -29,7 +32,7 @@ export default function Prijava() {
     setGreska("");
 
     if (!token) {
-      setGreska("Moraš prvo da se prijaviš (nema tokena).");
+      setGreska("Moraš prvo da se prijaviš.");
       return;
     }
     if (!korisnikId) {
@@ -52,7 +55,7 @@ export default function Prijava() {
         }
       );
 
-      setPoruka(res.data.poruka || "Uspešno rezervisano!");
+      setPoruka(res.data?.poruka || "Uspešno rezervisano!");
     } catch (e) {
       const msg =
         e?.response?.data?.poruka ||
@@ -62,29 +65,58 @@ export default function Prijava() {
     }
   };
 
-  if (loading) return <p>Učitavanje...</p>;
-  if (!izlozba) return <p style={{ color: "red" }}>Izložba ne postoji.</p>;
+  if (loading) return <div className="prj-state">Učitavanje...</div>;
+  if (!izlozba) return <div className="prj-state prj-state--error">Izložba ne postoji.</div>;
 
   return (
-    <div>
-      <Link to={`/izlozbe/${id}`}>← Nazad na izložbu</Link>
+    <div className="prj-page">
+      <div className="prj-container">
+        <div className="prj-card">
+          <div className="prj-top">
+            <Link className="prj-back" to={`/izlozbe/${id}`}>
+              ← Nazad na izložbu
+            </Link>
+          </div>
 
-      <h2>Prijava na izložbu</h2>
-      <p>
-        <b>{izlozba.naziv}</b> – {izlozba.lokacija} ({izlozba.datum})
-      </p>
+          <h2 className="prj-title">Rezervacija mesta</h2>
 
-      <Button onClick={rezervisi}>
-        Rezerviši mesto
-      </Button>
+          <p className="prj-subtitle">
+            Rezervišeš mesto za izložbu <b>{izlozba.naziv}</b>.
+          </p>
 
-      {poruka && <p style={{ color: "green", marginTop: 12 }}>{poruka}</p>}
-      {greska && <p style={{ color: "red", marginTop: 12 }}>{greska}</p>}
+          <div className="prj-meta">
+            <div className="prj-metaItem">
+              <span className="prj-label">Lokacija</span>
+              <div className="prj-value">{izlozba.lokacija}</div>
+            </div>
 
-      <div style={{ marginTop: 16 }}>
-        <Button onClick={() => navigate(`/izlozbe/${id}/galerija`)}>
-          Pogledaj galeriju
-        </Button>
+            <div className="prj-metaItem">
+              <span className="prj-label">Datum</span>
+              <div className="prj-value">{izlozba.datum}</div>
+            </div>
+          </div>
+
+          <div className="prj-actions">
+            <Button onClick={rezervisi}>Rezerviši mesto</Button>
+
+            <button
+              className="prj-secondaryBtn"
+              type="button"
+              onClick={() => navigate(`/izlozbe/${id}/galerija`)}
+            >
+              Pogledaj galeriju
+            </button>
+          </div>
+
+          {poruka && <div className="prj-alert prj-alert--ok">{poruka}</div>}
+          {greska && <div className="prj-alert prj-alert--err">{greska}</div>}
+
+          {!token && (
+            <div className="prj-hint">
+              Nisi prijavljen. Vrati se na login stranicu i prijavi se.
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

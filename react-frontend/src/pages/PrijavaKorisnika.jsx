@@ -29,6 +29,7 @@ export default function PrijavaKorisnika() {
 
       localStorage.setItem("token", token);
       localStorage.setItem("korisnikId", korisnik.id);
+      localStorage.setItem("uloga", res.data.korisnik.uloga);
 
       navigate("/pocetna");
     } catch (err) {
@@ -43,7 +44,7 @@ export default function PrijavaKorisnika() {
   return (
     <div className="prijava-page">
       <div className="prijava-card">
-        <h2>Prijava korisnika</h2>
+        <h2>Prijava</h2>
 
         <form onSubmit={submit}>
           <Input
