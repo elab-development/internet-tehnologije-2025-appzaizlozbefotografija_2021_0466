@@ -24,5 +24,13 @@ class IzlozbaSeeder extends Seeder
             'datum' => now()->addDays(20),
             'dostupna_mesta' => 50
         ]);
+
+        Izlozba::create([
+            'naziv' => 'Sportovi',
+            'opis' => 'Fotografije poznatih sportova i sportista.',
+            'lokacija' => 'Niš',
+            'datum' => now()->addDays(30),
+            'dostupna_mesta' => 70
+        ]);
     }
 }
