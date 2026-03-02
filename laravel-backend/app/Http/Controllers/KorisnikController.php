@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Korisnik;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use OpenApi\Attributes as OA;
 
 class KorisnikController extends Controller
 {
@@ -15,11 +16,31 @@ class KorisnikController extends Controller
         }
     }
 
+    #[OA\Get(path: "/api/korisnici", summary: "Lista korisnika (admin)", tags: ["Korisnici"],
+    security: [["bearerAuth" => []]],
+    responses: [new OA\Response(response: 200, description: "OK"), new OA\Response(response: 403, description: "Zabranjeno")]
+)]
+
     public function index()
     {
         $this->samoAdmin();
         return response()->json(Korisnik::all(), 200);
     }
+
+    #[OA\Post(path: "/api/korisnici", summary: "Kreiranje korisnika (admin)", tags: ["Korisnici"],
+    security: [["bearerAuth" => []]],
+    requestBody: new OA\RequestBody(required: true, content: new OA\JsonContent(
+        required: ["ime","prezime","email","lozinka","uloga"],
+        properties: [
+            new OA\Property(property: "ime", type: "string", example: "Ana"),
+            new OA\Property(property: "prezime", type: "string", example: "Anić"),
+            new OA\Property(property: "email", type: "string", example: "ana@test.com"),
+            new OA\Property(property: "lozinka", type: "string", example: "ana12345"),
+            new OA\Property(property: "uloga", type: "string", example: "fotograf"),
+        ]
+    )),
+    responses: [new OA\Response(response: 201, description: "Kreirano"), new OA\Response(response: 403, description: "Zabranjeno")]
+)]
 
     public function store(Request $request)
     {
@@ -43,6 +64,21 @@ class KorisnikController extends Controller
 
         return response()->json($korisnik, 201);
     }
+
+    #[OA\Put(path: "/api/korisnici/{id}", summary: "Izmena korisnika (admin)", tags: ["Korisnici"],
+    security: [["bearerAuth" => []]],
+    parameters: [new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))],
+    requestBody: new OA\RequestBody(required: true, content: new OA\JsonContent(
+        properties: [
+            new OA\Property(property: "ime", type: "string", example: "Ana"),
+            new OA\Property(property: "prezime", type: "string", example: "Anić"),
+            new OA\Property(property: "email", type: "string", example: "ana@test.com"),
+            new OA\Property(property: "lozinka", type: "string", example: "nova12345"),
+            new OA\Property(property: "uloga", type: "string", example: "admin"),
+        ]
+    )),
+    responses: [new OA\Response(response: 200, description: "OK"), new OA\Response(response: 404, description: "Nije pronađen")]
+)]
 
     public function update(Request $request, $id)
     {
@@ -70,6 +106,12 @@ class KorisnikController extends Controller
         return response()->json($korisnik, 200);
     }
 
+    #[OA\Delete(path: "/api/korisnici/{id}", summary: "Brisanje korisnika (admin)", tags: ["Korisnici"],
+    security: [["bearerAuth" => []]],
+    parameters: [new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))],
+    responses: [new OA\Response(response: 200, description: "Obrisan"), new OA\Response(response: 404, description: "Nije pronađen")]
+)]
+
     public function destroy($id)
     {
         $this->samoAdmin();
@@ -82,6 +124,12 @@ class KorisnikController extends Controller
         $korisnik->delete();
         return response()->json(['poruka' => 'Korisnik obrisan.'], 200);
     }
+
+    #[OA\Get(path: "/api/korisnici/{id}/izlozbe", summary: "Izložbe na koje je korisnik prijavljen", tags: ["Korisnici"],
+    security: [["bearerAuth" => []]],
+    parameters: [new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))],
+    responses: [new OA\Response(response: 200, description: "OK"), new OA\Response(response: 404, description: "Nije pronađen")]
+)]
 
     public function izlozbe($id)
     {

@@ -7,10 +7,16 @@ use App\Models\Prijava;
 use App\Models\Izlozba;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use OpenApi\Attributes as OA;
 
 class PrijavaController extends Controller
 {
     
+    #[OA\Get(path: "/api/prijave", summary: "Lista prijava (admin)", tags: ["Prijave"],
+    security: [["bearerAuth" => []]],
+    responses: [new OA\Response(response: 200, description: "OK"), new OA\Response(response: 403, description: "Zabranjeno")]
+)]
+
     public function index()
     {
         if (!auth()->check()) {
@@ -27,6 +33,19 @@ class PrijavaController extends Controller
 
         return response()->json($prijave, 200);
     }
+
+    #[OA\Post(path: "/api/prijave", summary: "Rezervacija mesta na izložbi (posetilac)", tags: ["Prijave"],
+    security: [["bearerAuth" => []]],
+    requestBody: new OA\RequestBody(required: true, content: new OA\JsonContent(
+        required: ["izlozba_id"],
+        properties: [new OA\Property(property: "izlozba_id", type: "integer", example: 1)]
+    )),
+    responses: [
+        new OA\Response(response: 201, description: "Rezervisano"),
+        new OA\Response(response: 422, description: "Nema mesta / validacija"),
+        new OA\Response(response: 403, description: "Samo posetilac"),
+    ]
+)]
 
     public function store(Request $request)
     {
@@ -51,7 +70,7 @@ class PrijavaController extends Controller
                 $prijava = Prijava::create([
                     'korisnik_id' => auth()->id(),
                     'izlozba_id' => $validated['izlozba_id'],
-                    'datum_prijave' => now()->toDateString(),
+                    'datum_prijave' => now(),
                     'qr_kod' => (string) Str::uuid(),
                 ]);
 
@@ -74,6 +93,12 @@ class PrijavaController extends Controller
             ], 500);
         }
     }
+
+    #[OA\Delete(path: "/api/prijave/{id}", summary: "Brisanje prijave (admin ili vlasnik)", tags: ["Prijave"],
+    security: [["bearerAuth" => []]],
+    parameters: [new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))],
+    responses: [new OA\Response(response: 200, description: "Obrisano"), new OA\Response(response: 404, description: "Nije pronađena")]
+)]
 
     public function destroy($id)
     {
@@ -125,6 +150,15 @@ class PrijavaController extends Controller
         }
     }
 
+    #[OA\Put(path: "/api/izlozbe/{id}/prijave/datum", summary: "Ažuriranje datuma prijave za izložbu (admin)", tags: ["Prijave"],
+    security: [["bearerAuth" => []]],
+    parameters: [new OA\Parameter(name: "id", in: "path", required: true, schema: new OA\Schema(type: "integer"))],
+    requestBody: new OA\RequestBody(required: true, content: new OA\JsonContent(
+        required: ["datum_prijave"],
+        properties: [new OA\Property(property: "datum_prijave", type: "string", format: "date", example: "2026-03-10")]
+    )),
+    responses: [new OA\Response(response: 200, description: "OK"), new OA\Response(response: 403, description: "Zabranjeno")]
+)]
     
     public function azurirajDatumeZaIzlozbu(Request $request, $id)
     {

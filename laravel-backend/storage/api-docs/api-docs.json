@@ -1,0 +1,967 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "API – Aplikacija za izložbe fotografija",
+        "description": "Swagger dokumentacija Laravel API-ja",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:8000",
+            "description": "Lokalno (Docker)"
+        }
+    ],
+    "paths": {
+        "/api/registracija": {
+            "post": {
+                "tags": [
+                    "Autentifikacija"
+                ],
+                "summary": "Registracija korisnika (posetilac)",
+                "operationId": "01f458cfcfa16b238b86777cb1c62aea",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "ime",
+                                    "prezime",
+                                    "email",
+                                    "lozinka",
+                                    "lozinka_confirmation"
+                                ],
+                                "properties": {
+                                    "ime": {
+                                        "type": "string",
+                                        "example": "Pera"
+                                    },
+                                    "prezime": {
+                                        "type": "string",
+                                        "example": "Perić"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "example": "pera@test.com"
+                                    },
+                                    "lozinka": {
+                                        "type": "string",
+                                        "example": "pera123"
+                                    },
+                                    "lozinka_confirmation": {
+                                        "type": "string",
+                                        "example": "pera123"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Korisnik registrovan"
+                    },
+                    "422": {
+                        "description": "Validaciona greška"
+                    }
+                }
+            }
+        },
+        "/api/prijava": {
+            "post": {
+                "tags": [
+                    "Autentifikacija"
+                ],
+                "summary": "Prijava korisnika",
+                "operationId": "534ba388340e751c9ec73ede1668b3dd",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "email",
+                                    "lozinka"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "example": "pera@test.com"
+                                    },
+                                    "lozinka": {
+                                        "type": "string",
+                                        "example": "pera123"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Ulogovan"
+                    },
+                    "401": {
+                        "description": "Pogrešan email ili lozinka"
+                    },
+                    "422": {
+                        "description": "Validaciona greška"
+                    }
+                }
+            }
+        },
+        "/api/odjava": {
+            "post": {
+                "tags": [
+                    "Autentifikacija"
+                ],
+                "summary": "Odjava korisnika",
+                "operationId": "21de471e1d40554ea5e664c48ce4b626",
+                "responses": {
+                    "200": {
+                        "description": "Odjavljen"
+                    },
+                    "401": {
+                        "description": "Niste autentifikovani"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/korisnik": {
+            "get": {
+                "tags": [
+                    "Autentifikacija"
+                ],
+                "summary": "Vraća ulogovanog korisnika",
+                "operationId": "baaa5dbf2bcac8cd324495d1aad5d660",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "401": {
+                        "description": "Niste autentifikovani"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/zaboravljena-lozinka": {
+            "post": {
+                "tags": [
+                    "Autentifikacija"
+                ],
+                "summary": "Reset lozinke (direktna promena)",
+                "operationId": "e64ae69e3d1bfc9a55daccbf463db2c0",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "email",
+                                    "nova_lozinka",
+                                    "nova_lozinka_confirmation"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "example": "pera@test.com"
+                                    },
+                                    "nova_lozinka": {
+                                        "type": "string",
+                                        "example": "nova12345"
+                                    },
+                                    "nova_lozinka_confirmation": {
+                                        "type": "string",
+                                        "example": "nova12345"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Lozinka promenjena"
+                    },
+                    "422": {
+                        "description": "Validaciona greška"
+                    }
+                }
+            }
+        },
+        "/api/fotografije": {
+            "get": {
+                "tags": [
+                    "Fotografije"
+                ],
+                "summary": "Lista fotografija",
+                "operationId": "d774d3ff2232e2859e57b0cf9ad69e73",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Fotografije"
+                ],
+                "summary": "Dodavanje fotografije (fotograf)",
+                "operationId": "804eeb7eaf4974f11b05333ffa1a85df",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "naziv",
+                                    "izlozba_id"
+                                ],
+                                "properties": {
+                                    "naziv": {
+                                        "type": "string",
+                                        "example": "Planina"
+                                    },
+                                    "opis": {
+                                        "type": "string",
+                                        "example": "Opis..."
+                                    },
+                                    "izlozba_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "url": {
+                                        "type": "string",
+                                        "example": "https://example.com/slika.jpg"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Kreirano"
+                    },
+                    "403": {
+                        "description": "Zabranjeno"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/fotografije/{id}": {
+            "get": {
+                "tags": [
+                    "Fotografije"
+                ],
+                "summary": "Detalji fotografije",
+                "operationId": "fef68180f89ba8cc47b7f259cfd1633a",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "404": {
+                        "description": "Nije pronađena"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Fotografije"
+                ],
+                "summary": "Brisanje fotografije (admin)",
+                "operationId": "42dbfebd0d1ec3dee0e0953859f91295",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Obrisano"
+                    },
+                    "404": {
+                        "description": "Nije pronađena"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/izlozbe": {
+            "get": {
+                "tags": [
+                    "Izložbe"
+                ],
+                "summary": "Lista izložbi (sa filterima/paginacijom)",
+                "operationId": "a8deab27d9f703cac2820dc4d16aad8e",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Izložbe"
+                ],
+                "summary": "Kreiranje izložbe (admin)",
+                "operationId": "8dbc4fc1345e0f2b1bd0410f783246ef",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "naziv",
+                                    "datum",
+                                    "lokacija"
+                                ],
+                                "properties": {
+                                    "naziv": {
+                                        "type": "string",
+                                        "example": "Izložba 2026"
+                                    },
+                                    "datum": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2026-03-10"
+                                    },
+                                    "lokacija": {
+                                        "type": "string",
+                                        "example": "Beograd"
+                                    },
+                                    "opis": {
+                                        "type": "string",
+                                        "example": "Opis..."
+                                    },
+                                    "dostupna_mesta": {
+                                        "type": "integer",
+                                        "example": 50
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Kreirano"
+                    },
+                    "403": {
+                        "description": "Zabranjeno"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/izlozbe/{id}": {
+            "get": {
+                "tags": [
+                    "Izložbe"
+                ],
+                "summary": "Detalji izložbe",
+                "operationId": "eacbe74b71ad07f1d64c52393698253d",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "404": {
+                        "description": "Nije pronađena"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Izložbe"
+                ],
+                "summary": "Izmena izložbe (admin)",
+                "operationId": "1e8ef8211e309bf261a52d9a1f850386",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "naziv",
+                                    "datum",
+                                    "lokacija"
+                                ],
+                                "properties": {
+                                    "naziv": {
+                                        "type": "string",
+                                        "example": "Izložba 2026"
+                                    },
+                                    "datum": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2026-03-10"
+                                    },
+                                    "lokacija": {
+                                        "type": "string",
+                                        "example": "Beograd"
+                                    },
+                                    "opis": {
+                                        "type": "string",
+                                        "example": "Opis..."
+                                    },
+                                    "dostupna_mesta": {
+                                        "type": "integer",
+                                        "example": 50
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "404": {
+                        "description": "Nije pronađena"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Izložbe"
+                ],
+                "summary": "Brisanje izložbe (admin)",
+                "operationId": "a779745ec1e2296f89eaf870ef0312de",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Obrisano"
+                    },
+                    "404": {
+                        "description": "Nije pronađena"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/izlozbe/{id}/fotografije": {
+            "get": {
+                "tags": [
+                    "Izložbe"
+                ],
+                "summary": "Fotografije za izložbu",
+                "operationId": "1bcb3e17f8964fdbd62364b30765ae09",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "404": {
+                        "description": "Nije pronađena"
+                    }
+                }
+            }
+        },
+        "/api/izlozbe/{id}/prijave": {
+            "get": {
+                "tags": [
+                    "Izložbe"
+                ],
+                "summary": "Prijave za izložbu (sa korisnikom)",
+                "operationId": "6e30109b674f4bcd25d871e24e601d54",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "404": {
+                        "description": "Nije pronađena"
+                    }
+                }
+            }
+        },
+        "/api/korisnici": {
+            "get": {
+                "tags": [
+                    "Korisnici"
+                ],
+                "summary": "Lista korisnika (admin)",
+                "operationId": "5061f6d16eb244e5b6757a44af053383",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "403": {
+                        "description": "Zabranjeno"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Korisnici"
+                ],
+                "summary": "Kreiranje korisnika (admin)",
+                "operationId": "b09c5a6427c0ae9a7ce73389ef77acf3",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "ime",
+                                    "prezime",
+                                    "email",
+                                    "lozinka",
+                                    "uloga"
+                                ],
+                                "properties": {
+                                    "ime": {
+                                        "type": "string",
+                                        "example": "Ana"
+                                    },
+                                    "prezime": {
+                                        "type": "string",
+                                        "example": "Anić"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "example": "ana@test.com"
+                                    },
+                                    "lozinka": {
+                                        "type": "string",
+                                        "example": "ana12345"
+                                    },
+                                    "uloga": {
+                                        "type": "string",
+                                        "example": "fotograf"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Kreirano"
+                    },
+                    "403": {
+                        "description": "Zabranjeno"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/korisnici/{id}": {
+            "put": {
+                "tags": [
+                    "Korisnici"
+                ],
+                "summary": "Izmena korisnika (admin)",
+                "operationId": "ce20b76969d640b2ad7066574cc652e4",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "ime": {
+                                        "type": "string",
+                                        "example": "Ana"
+                                    },
+                                    "prezime": {
+                                        "type": "string",
+                                        "example": "Anić"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "example": "ana@test.com"
+                                    },
+                                    "lozinka": {
+                                        "type": "string",
+                                        "example": "nova12345"
+                                    },
+                                    "uloga": {
+                                        "type": "string",
+                                        "example": "admin"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "404": {
+                        "description": "Nije pronađen"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Korisnici"
+                ],
+                "summary": "Brisanje korisnika (admin)",
+                "operationId": "fb63425b86922025564614af57838826",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Obrisan"
+                    },
+                    "404": {
+                        "description": "Nije pronađen"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/korisnici/{id}/izlozbe": {
+            "get": {
+                "tags": [
+                    "Korisnici"
+                ],
+                "summary": "Izložbe na koje je korisnik prijavljen",
+                "operationId": "078c3385ba5cfdc58f0ace780d04b816",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "404": {
+                        "description": "Nije pronađen"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/prijave": {
+            "get": {
+                "tags": [
+                    "Prijave"
+                ],
+                "summary": "Lista prijava (admin)",
+                "operationId": "0c614230a3d91512760eb7fef3081087",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "403": {
+                        "description": "Zabranjeno"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Prijave"
+                ],
+                "summary": "Rezervacija mesta na izložbi (posetilac)",
+                "operationId": "be50d3fcfc2ffb2443d1b0d242b94ceb",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "izlozba_id"
+                                ],
+                                "properties": {
+                                    "izlozba_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Rezervisano"
+                    },
+                    "422": {
+                        "description": "Nema mesta / validacija"
+                    },
+                    "403": {
+                        "description": "Samo posetilac"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/prijave/{id}": {
+            "delete": {
+                "tags": [
+                    "Prijave"
+                ],
+                "summary": "Brisanje prijave (admin ili vlasnik)",
+                "operationId": "9b202a29bbc5850505ee74951e036ec4",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Obrisano"
+                    },
+                    "404": {
+                        "description": "Nije pronađena"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/izlozbe/{id}/prijave/datum": {
+            "put": {
+                "tags": [
+                    "Prijave"
+                ],
+                "summary": "Ažuriranje datuma prijave za izložbu (admin)",
+                "operationId": "eca9482810b2aac9efd15d8483576763",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "datum_prijave"
+                                ],
+                                "properties": {
+                                    "datum_prijave": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2026-03-10"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "403": {
+                        "description": "Zabranjeno"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "description": "Unesi token u formatu: Bearer {token}",
+                "bearerFormat": "Token",
+                "scheme": "bearer"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Autentifikacija",
+            "description": "Autentifikacija"
+        },
+        {
+            "name": "Fotografije",
+            "description": "Fotografije"
+        },
+        {
+            "name": "Izložbe",
+            "description": "Izložbe"
+        },
+        {
+            "name": "Korisnici",
+            "description": "Korisnici"
+        },
+        {
+            "name": "Prijave",
+            "description": "Prijave"
+        }
+    ]
+}

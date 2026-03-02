@@ -10,6 +10,7 @@ use App\Http\Controllers\KorisnikController;
 use App\Http\Controllers\AutentifikacijaController;
 
 
+
 Route::post('/registracija', [AutentifikacijaController::class, 'registracija']);
 Route::post('/prijava', [AutentifikacijaController::class, 'prijava']);
 Route::post('/zaboravljena-lozinka', [AutentifikacijaController::class, 'resetujLozinku']);
