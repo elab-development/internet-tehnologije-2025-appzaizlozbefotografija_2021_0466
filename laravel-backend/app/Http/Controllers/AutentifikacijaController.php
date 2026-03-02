@@ -101,7 +101,7 @@ class AutentifikacijaController extends Controller
         $korisnik = Korisnik::where('email', $podaci['email'])->first();
 
         if (!$korisnik || !Hash::check($podaci['lozinka'], $korisnik->lozinka)) {
-            return response()->json(['poruka' => 'Pogrešan email ili lozinka.'], 401);
+            return response()->json(['poruka' => 'Email ili lozinka nisu ispravni.'], 401);
         }
 
         $token = $korisnik->createToken('pristup_token')->plainTextToken;
