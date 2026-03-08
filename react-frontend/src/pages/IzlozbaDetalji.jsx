@@ -2,11 +2,15 @@ import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import axios from "axios";
 import "./IzlozbaDetalji.css";
+import MapaIzlozbe from '../components/MapaIzlozbe.jsx';
 
 function IzlozbaDetalji() {
   const { id } = useParams();
   const [izlozba, setIzlozba] = useState(null);
   const [error, setError] = useState("");
+  const [vreme, setVreme] = useState(null);
+  const [koordinate, setKoordinate] = useState(null);
+  
 
   useEffect(() => {
     axios
@@ -17,6 +21,35 @@ function IzlozbaDetalji() {
       })
       .catch(() => setError("Greška pri učitavanju izložbe"));
   }, [id]);
+
+  useEffect(() => {
+      if (!izlozba?.lokacija) return;
+
+        axios
+          .get(`https://nominatim.openstreetmap.org/search?format=json&q=${izlozba.lokacija}`)
+          .then((res) => {
+            if (res.data.length > 0) {
+              setKoordinate({
+                lat: parseFloat(res.data[0].lat),
+                lon: parseFloat(res.data[0].lon)
+              });
+            }
+          })
+          .catch(() => console.log("Greška pri učitavanju koordinata"));
+    }, [izlozba]);
+
+  useEffect(() => {
+  if (!koordinate) return;
+
+      axios
+        .get(
+          `https://api.open-meteo.com/v1/forecast?latitude=${koordinate.lat}&longitude=${koordinate.lon}&current=temperature_2m,wind_speed_10m`
+        )
+        .then((res) => {
+          setVreme(res.data.current);
+        })
+        .catch(() => console.log("Greška pri učitavanju vremena"));
+    }, [koordinate]);
 
   if (error) return <div className="izd-state">{error}</div>;
   if (!izlozba) return <div className="izd-state">Učitavanje...</div>;
@@ -51,6 +84,23 @@ function IzlozbaDetalji() {
 
           
           </div>
+
+            {koordinate && (
+              <MapaIzlozbe
+                lat={koordinate.lat}
+                lon={koordinate.lon}
+                naziv={izlozba.naziv}
+              />
+            )}
+
+          {vreme && (
+            <div style={{ marginTop: "20px" }}>
+              <h3>Trenutno vreme</h3>
+              <p>Temperatura: {vreme.temperature_2m} °C</p>
+              <p>Brzina vetra: {vreme.wind_speed_10m} km/h</p>
+            </div>
+          )}
+
 
           <div className="izd-actions">
             <Link to="/izlozbe" className="izd-btn izd-btnLink">
