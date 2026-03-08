@@ -58,8 +58,8 @@ class FotografijaController extends Controller
 
         if ($request->hasFile('slika')) {
             $imeFajla = time() . '.' . $request->file('slika')->getClientOriginalExtension();
-            $request->file('slika')->move(public_path('fotografije'), $imeFajla);
-            $fotografija->putanja_slike = 'fotografije/' . $imeFajla;
+            $request->file('slika')->storeAs('fotografije', $imeFajla, 'public');
+            $fotografija->putanja_slike = 'storage/fotografije/' . $imeFajla;
         } else {
             $fotografija->putanja_slike = $validated['url'];
         }
